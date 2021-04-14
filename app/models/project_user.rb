@@ -1,2 +1,0 @@
-class ProjectUser < ApplicationRecord
-end

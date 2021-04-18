@@ -1,0 +1,19 @@
+language: ruby
+rvm:
+ — 3.0.1
+
+services:
+  - postgresql
+
+cache: bundler
+
+before_install:
+ - gem update --system
+ - gem install bundler --no-document
+
+before_script:
+  - psql -c 'create database six_pack_champsss_rails_test;' -U postgres
+  - bundle exec rake db:migrate
+
+script:
+ - bundle exec rspec

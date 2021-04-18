@@ -1,3 +1,9 @@
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database six_pack_champsss_rails_test;' -U postgres
+
 language: ruby
 rvm:
  — 3.0.1

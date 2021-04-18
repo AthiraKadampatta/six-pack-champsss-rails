@@ -17,3 +17,12 @@ before_script:
 
 script:
  - bundle exec rspec
+
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: "GH4TU8dgl69pttZBwTBe1aT1q0ESmK3tcKsu5LH8gft6hmfjHBtWdhDhHkW54W0W49xTRxRRb7NK00HV+mtOmwniiF4wMQa25U5/To0QhkNoJa+C5pbSpVNA5vbg8Aj3o4ydeyrn6wJ09erlKIXohwnf79j6jRM8gfGhzabZfJOlp2dfWJVU0R7OIXiAYiW2IBVAeakcJA/HgKYXRrDseDQfOG5eCw3YrS4bkrmJq1vVqxBJ0oKBldMbGn6j6ru1OkAVQluusmKUAnHxqwnj6Ntq8eXJEH3JLnuhQ+IagdOyjEyJU/Wdo9/GiaqZPu8Ukhx1l2WZjDt7XC1nJ1GIhAWn5M8cMFk5EGfvISBWmSZp/RWgI1y5zChqvyXo6b2HcLQeg7kF1WtEzK5zwEVV8iyZyzYvlJgtk5L94AFSb0MhnJXsXDd874hcYNG0UqpdxGttDba4rxfBw1AytU/YjwT+hubwfLegEroal4M0JuROlIqk2hNFI8cBusNDYA5/CvQ9zZTuHFIsTT3tAfe5YA7w66dfhYn0tss8ZE+Ox49Od/gaeq5KBBJmgaih9j8RkIe2+NDT9s5yRzML0M5HLfAVqu5l05ahnVCSqH8O9xyMzhcxCPInQ2CSzLpuoK8xpLaTpgQow4wVgpB3d7K7VRBKiWFF44ffLjcEd22VM8Y="
+  app: six-pack-champsss-rails
+  on:
+    repo: AthiraKadampatta/six-pack-champsss-rails

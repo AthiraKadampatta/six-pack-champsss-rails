@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_14_174431) do
+ActiveRecord::Schema.define(version: 2021_04_21_192753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,15 +24,20 @@ ActiveRecord::Schema.define(version: 2021_04_14_174431) do
     t.datetime "performed_on"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "status"
+    t.integer "points_granted"
+    t.integer "reviewed_by"
+    t.datetime "reviewed_at"
     t.index ["project_id"], name: "index_activities_on_project_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
   end
 
-  create_table "points_requests", force: :cascade do |t|
-    t.integer "activity_id"
-    t.integer "status"
-    t.integer "points_granted"
-    t.integer "action_by"
+  create_table "points_transactions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "transactable_id"
+    t.string "transactable_type"
+    t.integer "points"
+    t.integer "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -46,6 +51,15 @@ ActiveRecord::Schema.define(version: 2021_04_14_174431) do
   create_table "projects_users", id: false, force: :cascade do |t|
     t.bigint "project_id", null: false
     t.bigint "user_id", null: false
+  end
+
+  create_table "redeem_requests", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "points"
+    t.integer "status"
+    t.integer "reward_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "roles", force: :cascade do |t|

@@ -10,7 +10,6 @@ class Api::V1::ProjectsController < ApplicationController
     if @project.persisted?
       render json: { message: 'Project created successfully!'}, status: :ok
     else
-      debugger
       render json: { message: @project.errors.full_messages }, status: 500
     end
   end

@@ -50,6 +50,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def require_admin
-    true
+    head :unauthorized unless (current_user.admin? || current_user.owner?)
   end
 end

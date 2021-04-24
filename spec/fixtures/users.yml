@@ -1,5 +1,11 @@
-one:
+associate_one:
   id: 1
   name: Test User
   email: test_user@abc.com
   role_id: 'associate'
+
+admin_one:
+  id: 2
+  name: Test Admin User
+  email: test_admin_user@abc.com
+  role_id: 'admin'

@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 describe Api::V1::UsersController, type: :request do
+  before { sign_in_as(users(:associate_one)) }
+
   describe 'show' do
-    let(:user) { users(:one) }
-    subject(:show_users_api) { get "/api/v1/users/#{user.id}" }
+    let(:user) { users(:associate_one) }
+    subject(:show_users_api) { get "/api/v1/users/#{user.id}", headers: { 'Authorization' => 'dummy' } }
 
     it 'returns appropriate headers' do
       show_users_api
@@ -27,8 +29,8 @@ describe Api::V1::UsersController, type: :request do
   end
 
   describe 'update' do
-    let(:user) { users(:one) }
-    subject(:update_user_api) { put "/api/v1/users/#{user.id}", params: { user: { name: 'ABC' } } }
+    let(:user) { users(:associate_one) }
+    subject(:update_user_api) { put "/api/v1/users/#{user.id}", params: { user: { name: 'ABC' } }, headers: { 'Authorization' => 'dummy' } }
 
     it 'returns 200 status' do
       update_user_api
@@ -42,17 +44,30 @@ describe Api::V1::UsersController, type: :request do
   end
 
   describe 'assign_role' do
-    let(:user) { users(:one) }
-    subject(:assign_role_api) { put "/api/v1/users/#{user.id}/assign_role", params: { user: { role: 'admin' } } }
+    let(:user) { users(:associate_one) }
+    subject(:assign_role_api) { put "/api/v1/users/#{user.id}/assign_role", params: { user: { role: 'admin' } }, headers: { 'Authorization' => 'dummy' } }
 
-    it 'returns 200 status' do
-      assign_role_api
-      expect(response).to have_http_status(:success)
+    context 'when admin is logged in' do
+      before { sign_in_as(users(:admin_one)) }
+
+      it 'returns 200 status' do
+        assign_role_api
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'updates the role' do
+        assign_role_api
+        expect(user.reload.admin?).to be true
+      end
     end
 
-    it 'updates the role' do
-      assign_role_api
-      expect(user.reload.admin?).to be true
+    context 'when associate is logged in' do
+      before { sign_in_as(users(:associate_one)) }
+
+      it 'returns 401 status' do
+        assign_role_api
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
   end
 end

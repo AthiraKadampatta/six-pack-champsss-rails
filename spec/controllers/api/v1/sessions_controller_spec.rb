@@ -26,7 +26,7 @@ describe Api::V1::SessionsController, type: :request do
       end
     end
 
-    context 'when id_token is valid' do
+    context 'when id_token is invalid' do
       before do
         allow_any_instance_of(GoogleIDToken::Validator)
           .to receive(:check).and_raise(GoogleIDToken::ValidationError)

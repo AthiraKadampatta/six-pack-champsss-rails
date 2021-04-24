@@ -19,6 +19,8 @@ class Api::V1::UsersController < ApplicationController
   end
   returns code: 200
   def update
+    head :unauthorized and return if @user != current_user
+
     if @user.update(user_params)
       render json: @user
     else
@@ -47,9 +49,5 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name)
-  end
-
-  def require_admin
-    head :unauthorized unless (current_user.admin? || current_user.owner?)
   end
 end

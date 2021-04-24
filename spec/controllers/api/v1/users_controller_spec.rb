@@ -32,14 +32,25 @@ describe Api::V1::UsersController, type: :request do
     let(:user) { users(:associate_one) }
     subject(:update_user_api) { put "/api/v1/users/#{user.id}", params: { user: { name: 'ABC' } }, headers: { 'Authorization' => 'dummy' } }
 
-    it 'returns 200 status' do
-      update_user_api
-      expect(response).to have_http_status(:success)
+    context 'when current user and passed user is same' do
+      it 'returns 200 status' do
+        update_user_api
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'updates the name' do
+        update_user_api
+        expect(user.reload.name).to eq 'ABC'
+      end
     end
 
-    it 'updates the name' do
-      update_user_api
-      expect(user.reload.name).to eq 'ABC'
+    context 'when current user and passed user are different' do
+      before { sign_in_as(users(:admin_one)) }
+
+      it 'returns 401 status' do
+        update_user_api
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
   end
 

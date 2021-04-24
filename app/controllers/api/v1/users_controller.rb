@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
       property :id, Integer, desc: 'id of the requested user'
       property :name, String, desc: 'Name of the user'
       property :email, String, desc: 'Email of the user'
-      property :role_id, Integer, desc: 'Role id of the user'
+      property :role, String, desc: 'Role id of the user'
     end
   end
   def show; end
@@ -32,7 +32,7 @@ class Api::V1::UsersController < ApplicationController
   end
   returns code: 200
   def assign_role
-    if @user.update(role_id: params[:user][:role])
+    if @user.update(role: params[:user][:role])
       render json: @user
     else
       render json: @user.errors, status: :unprocessable_entity

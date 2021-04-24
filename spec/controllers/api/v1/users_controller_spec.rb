@@ -19,7 +19,7 @@ describe Api::V1::UsersController, type: :request do
 
     it 'has required keys in user' do
       show_users_api
-      expect(json_response[:user].keys).to include(:id, :name, :token, :email, :role_id)
+      expect(json_response[:user].keys).to include(:id, :name, :token, :email, :role)
     end
 
     it 'has required keys in total_points' do

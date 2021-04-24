@@ -2,7 +2,8 @@ class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :assign_role]
   before_action :require_admin, only: [:assign_role]
 
-  api :GET, '/users/:id'
+  api :GET, '/users/:id', 'User Profile Details'
+  param :id, Integer, desc: 'id of the user', required: true
   returns code: 200, desc: "Detailed info of the user" do
     property :user, Hash do
       property :id, Integer, desc: 'id of the requested user'
@@ -13,7 +14,8 @@ class Api::V1::UsersController < ApplicationController
   end
   def show; end
 
-  api :PUT, '/users/:id'
+  api :PUT, '/users/:id', 'Update user details for self'
+  param :id, Integer, desc: 'id of the user', required: true
   param :user, Hash, desc: 'User info' do
     param :name, String, desc: 'user name'
   end
@@ -28,9 +30,10 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  api :PUT, '/users/:id/:assign_role'
+  api :PUT, '/users/:id/assign_role', 'Assign role to user by admin'
+  param :id, Integer, desc: 'id of the user', required: true
   param :user, Hash, desc: 'User info' do
-    param :role, String, desc: 'New role id for the user'
+    param :role, String, desc: 'New role id for the user', default: 'associate', required: true
   end
   returns code: 200
   def assign_role

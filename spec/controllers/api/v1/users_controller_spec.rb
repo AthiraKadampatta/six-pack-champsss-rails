@@ -25,4 +25,34 @@ describe Api::V1::UsersController, type: :request do
       expect(json_response[:total_points].map(&:keys).flatten.uniq).to include(:project_name, :points)
     end
   end
+
+  describe 'update' do
+    let(:user) { users(:one) }
+    subject(:update_user_api) { put "/api/v1/users/#{user.id}", params: { user: { name: 'ABC' } } }
+
+    it 'returns 200 status' do
+      update_user_api
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'updates the name' do
+      update_user_api
+      expect(user.reload.name).to eq 'ABC'
+    end
+  end
+
+  describe 'assign_role' do
+    let(:user) { users(:one) }
+    subject(:assign_role_api) { put "/api/v1/users/#{user.id}/assign_role", params: { user: { role: 'admin' } } }
+
+    it 'returns 200 status' do
+      assign_role_api
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'updates the role' do
+      assign_role_api
+      expect(user.reload.admin?).to be true
+    end
+  end
 end

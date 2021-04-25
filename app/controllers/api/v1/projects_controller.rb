@@ -1,5 +1,5 @@
 class Api::V1::ProjectsController < ApplicationController
-  # before_filter :require_admin
+  before_filter :require_admin
 
   api :POST, '/projects'
   param :name, String, desc: 'name of the project'

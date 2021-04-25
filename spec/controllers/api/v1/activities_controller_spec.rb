@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 describe Api::V1::ActivitiesController, type: :request do
-  before { sign_in_as(users(:one)) }
+  before { sign_in_as(users(:associate_one)) }
 
   describe 'index' do
-    let(:user_1) { users(:one) }
+    let(:user_1) { users(:associate_one) }
     let(:pending_activities) { user_1.activities.pending.to_json }
     let(:approved_activities) { user_1.activities.approved.to_json }
     let(:rejected_activities) { user_1.activities.rejected.to_json }
@@ -49,7 +49,7 @@ describe Api::V1::ActivitiesController, type: :request do
   end
 
   describe 'create' do
-    let(:user_1) { users(:one) }
+    let(:user_1) { users(:associate_one) }
 
     it 'returns status 200 if record is created sucessfully' do
       post '/api/v1/activities',
@@ -66,7 +66,7 @@ describe Api::V1::ActivitiesController, type: :request do
   end
 
   describe 'update' do
-    let(:user_1) { users(:one) }
+    let(:user_1) { users(:associate_one) }
     let(:activity) { user_1.activities.first }
     let(:activity_2) { users(:associate_two).activities.first }
 
@@ -98,7 +98,7 @@ describe Api::V1::ActivitiesController, type: :request do
   end
 
   describe 'destroy' do
-    let(:user_1) { users(:one) }
+    let(:user_1) { users(:associate_one) }
     let(:activity) { user_1.activities.first }
 
     subject(:delete_request) { delete "/api/v1/activities/#{activity.id}",

@@ -13,6 +13,9 @@ Rails.application.routes.draw do
       resources :projects
 
       post 'auth/login', to: "sessions#login"
+      resources :projects do
+        resources :users, controller: 'projects/users', only: :create
+      end
     end
   end
 end

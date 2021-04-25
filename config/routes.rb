@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       end
 
       resources :users
-      resources :projects
+      resources :activities
 
       post 'auth/login', to: "sessions#login"
       resources :projects do

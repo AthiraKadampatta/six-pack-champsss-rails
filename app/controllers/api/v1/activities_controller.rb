@@ -13,9 +13,9 @@ class Api::V1::ActivitiesController < ApplicationController
   api :POST, 'v1/activities', 'Creates a user activity'
   param :activity, Hash, desc: 'Activity info' do
     param :description, String, desc: 'Description of the activity', required: true
-    param :duration, Integer, desc: 'Activity duration in minutes', required: true
-    param :project_id, Integer, desc: 'ID of the project', required: true
-    param :points_requested, Integer, desc: 'Points requested by the user', required: true
+    param :duration, :number, desc: 'Activity duration in minutes', required: true
+    param :project_id, :number, desc: 'ID of the project', required: true
+    param :points_requested, :number, desc: 'Points requested by the user', required: true
     param :performed_on, Date, desc: 'Date on which the activity is performed', required: true
   end
 
@@ -29,12 +29,12 @@ class Api::V1::ActivitiesController < ApplicationController
   end
 
   api :PUT, 'v1/activities/:id', 'Updates "pending" activity only'
-  param :id, Integer, required: true
+  param :id, :number, required: true
   param :activity, Hash, desc: 'Activity info' do
     param :description, String, required: true
-    param :duration, Integer, desc: 'Activity duration in minutes', required: true
-    param :project_id, Integer, required: true
-    param :points_requested, Integer, desc: 'Points requested by the user', required: true
+    param :duration, :number, desc: 'Activity duration in minutes', required: true
+    param :project_id, :number, required: true
+    param :points_requested, :number, desc: 'Points requested by the user', required: true
     param :performed_on, Date, required: true
   end
 
@@ -49,7 +49,7 @@ class Api::V1::ActivitiesController < ApplicationController
   end
 
   api :DELETE, 'v1/activities/:id', 'Deletes "pending" activity only'
-  param :id, Integer, required: true
+  param :id, :number, required: true
 
   def destroy
     return head :not_found unless @activity

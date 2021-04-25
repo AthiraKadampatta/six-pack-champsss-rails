@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
       resources :users
       resources :activities
-      
+
       namespace :admin do
         resources :activities, only: :index do
           member do

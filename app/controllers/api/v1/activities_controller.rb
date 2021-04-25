@@ -1,5 +1,6 @@
 class Api::V1::ActivitiesController < ApplicationController
   before_action :set_activity, only: [:update, :destroy]
+  before_action :require_admin, only: [:admin_index]
 
   api :GET, 'v1/activities', 'Lists all the activities of a user'
   param :status, String, desc: 'pending, approved or rejected', required: false
@@ -56,6 +57,14 @@ class Api::V1::ActivitiesController < ApplicationController
 
     @activity.destroy
     head :ok
+  end
+
+  api :GET, 'v1/activities/all', 'Lists all activities of all users based on status'
+  param :status, String, required: true
+
+  def admin_index
+    @activities = Activity.where(status: params[:status])
+    render json: @activities
   end
 
   private

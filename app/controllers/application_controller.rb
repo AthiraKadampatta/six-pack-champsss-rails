@@ -29,4 +29,8 @@ class ApplicationController < ActionController::API
   def user_email_in_token?
     http_token && auth_token && auth_token[:email]
   end
+
+  def require_admin
+    head :unauthorized unless (current_user.admin? || current_user.owner?)
+  end
 end

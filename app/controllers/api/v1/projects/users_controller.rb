@@ -1,5 +1,5 @@
 class Api::V1::Projects::UsersController < ApplicationController
-  # before_action :require_admin
+  before_action :require_admin
 
   api :post, '/projects/:id/users'
   param :project_id, :number, desc: 'id of the project'

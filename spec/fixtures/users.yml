@@ -9,3 +9,9 @@ admin_one:
   name: Test Admin User
   email: test_admin_user@abc.com
   role: 'admin'
+
+associate_two:
+  id: 3
+  name: Test User 2
+  email: test_user2@abc.com
+  role: 'associate'

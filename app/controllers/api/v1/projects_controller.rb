@@ -14,6 +14,12 @@ class Api::V1::ProjectsController < ApplicationController
     end
   end
 
+  api :GET, '/projects'
+
+  def index
+    render json: { projects: Project.all }
+  end
+
   private
 
   def project_params

@@ -32,3 +32,12 @@ activity_4:
   points_requested: 20
   points_granted: 20
   status: 1
+activity_5:
+  id: 5
+  user_id: 1
+  project_id: 1
+  description: 'Friday Frolic Planning'
+  duration: 1800
+  points_requested: 50
+  points_granted: 70
+  status: 0

@@ -24,7 +24,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'apipie-rails'
 gem 'jwt'
 gem 'google-id-token'
-
+gem 'aasm'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 

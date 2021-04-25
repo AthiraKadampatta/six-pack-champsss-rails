@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
   attr_accessor :current_user
 
   def authenticate_user!
-    head :unauthorized unless user_email_in_token?
+    return head :unauthorized unless user_email_in_token?
     fetch_current_user
   rescue JWT::VerificationError, JWT::DecodeError
     head :unauthorized

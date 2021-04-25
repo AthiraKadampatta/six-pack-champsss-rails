@@ -81,4 +81,32 @@ describe Api::V1::UsersController, type: :request do
       end
     end
   end
+
+  describe 'destroy' do
+    let(:user) { users(:associate_one) }
+
+    subject(:destroy_api) { delete "/api/v1/users/#{user.id}", headers: { 'Authorization' => 'dummy' } }
+
+    context 'when admin is logged in' do
+      before { sign_in_as(users(:admin_one)) }
+
+      it 'returns 200 status' do
+        destroy_api
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'destroys the user' do
+        expect { destroy_api }.to change { User.count }.by -1
+      end
+    end
+
+    context 'when associate is logged in' do
+      before { sign_in_as(users(:associate_one)) }
+
+      it 'returns 401 status' do
+        destroy_api
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end

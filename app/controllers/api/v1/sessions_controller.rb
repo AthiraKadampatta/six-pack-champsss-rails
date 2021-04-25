@@ -1,8 +1,8 @@
 class Api::V1::SessionsController < ApplicationController
   skip_before_action :authenticate_user!
 
-  api :POST, 'auth/login', 'Create session and user for login'
-  param :id_token, Integer, description: 'id_token returned by Google auth api', required: true
+  api :POST, '/v1/auth/login', 'Create session and user for login'
+  param :id_token, :number, description: 'id_token returned by Google auth api', required: true
   def login
     validator = GoogleIDToken::Validator.new
     begin

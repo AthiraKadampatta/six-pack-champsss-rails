@@ -5,6 +5,8 @@ class Activity < ApplicationRecord
   belongs_to :project
   has_one :points_transaction, as: :transactable
 
+  before_update :prevent_unless_status_pending, unless: -> { status_changed? }
+
   enum status: [:pending, :approved, :rejected]
 
   aasm column: :status, enum: true do
@@ -27,5 +29,12 @@ class Activity < ApplicationRecord
   def credit_points
     # TODO
     # Create a points_transaction of type credit
+  end
+
+  def prevent_unless_status_pending
+    unless pending?
+      errors.add(:base, "Cannot update #{status} activity")
+      throw(:abort)
+    end
   end
 end

@@ -13,8 +13,9 @@ class Api::V1::Projects::UsersController < ApplicationController
       # user record is not present in db,
       # so retrive user_ids from params
       # only if user is present in db
-      user_ids = User.where(id: params[:user_ids]).pluck(:id)
-      @project.user_ids = user_ids
+      users = User.where(id: params[:user_ids])
+      user_ids = users.pluck(:id)
+      @project.users << users
 
       message =
         if (@failed_ids = params[:user_ids] - user_ids.map(&:to_s)).any?

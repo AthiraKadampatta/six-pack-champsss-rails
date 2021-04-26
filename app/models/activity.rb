@@ -27,7 +27,7 @@ class Activity < ApplicationRecord
   end
 
   def credit_points!
-    PointsTransaction.create!(transactable: self, txn_type: 'credit', points: points_granted, user_id: user_id)
+    PointsTransaction.create!(transactable: self, txn_type: :credit, points: points_granted, user_id: user_id)
   end
 
   def prevent_unless_status_pending

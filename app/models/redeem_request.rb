@@ -7,6 +7,6 @@ class RedeemRequest < ApplicationRecord
   after_create :debit_points!
 
   def debit_points!
-    PointsTransaction.create!(transactable: self, txn_type: 'debit', points: points, user_id: user_id)
+    PointsTransaction.create!(transactable: self, txn_type: :debit, points: points, user_id: user_id)
   end
 end

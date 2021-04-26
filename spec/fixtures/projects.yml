@@ -2,3 +2,6 @@ one:
   id: 1
   name: Test Project
 
+two:
+  id: 2
+  name: Test Project2

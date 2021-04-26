@@ -41,13 +41,6 @@ describe Api::V1::ProjectsController, type: :request do
       expect(response.content_type).to include("application/json")
     end
 
-    it 'returns all projects' do
-      index_projects_api
-
-      expect(response).to have_http_status(:success)
-      expect(json_response[:projects].map { |p| p[:id] }).to match_array([1, 2])
-    end
-
     it 'reutrns project users details' do
       associate_one = users(:associate_one)
       associate_two = users(:associate_two)
@@ -61,6 +54,31 @@ describe Api::V1::ProjectsController, type: :request do
         [associate_one.name,
         associate_two.name]
       ])
+    end
+
+    context 'for admin user' do
+      it 'returns all projects' do
+        index_projects_api
+
+        expect(response).to have_http_status(:success)
+        expect(json_response[:projects].map { |p| p[:id] }).to match_array([1, 2])
+      end
+    end
+
+    context 'for non-admin user' do
+      let(:associate_one) { users :associate_one }
+      let(:associate_two) { users :associate_two }
+
+      before do
+        sign_in_as(users(:associate_one))
+        project.user_ids = [associate_one.id]
+      end
+
+      it 'returns user\'s projects' do
+        index_projects_api
+
+        expect(json_response[:projects].map { |p| p[:id] }).to match_array([1])
+      end
     end
   end
 
@@ -78,7 +96,7 @@ describe Api::V1::ProjectsController, type: :request do
       show_project_api
 
       expect(response).to have_http_status(:success)
-      expect(json_response[:project][:name]).to eq project.name
+      expect(json_response[:name]).to eq project.name
     end
 
     it 'reutrns project users details' do
@@ -93,6 +111,31 @@ describe Api::V1::ProjectsController, type: :request do
         associate_one.name,
         associate_two.name
       ])
+    end
+
+    context 'for non-admin user' do
+      let(:associate_one) { users :associate_one }
+      let(:associate_two) { users :associate_two }
+
+      before { sign_in_as(users(:associate_one)) }
+
+      context 'current user present in requested project' do
+        before { project.user_ids = [associate_one.id] }
+
+        it 'returns user\'s project' do
+          show_project_api
+
+          expect(json_response[:name]).to eq project.name
+        end
+      end
+
+      context 'current user not present in requested project' do
+        it 'returns user\'s project' do
+          show_project_api
+
+          expect(response).to have_http_status(:not_found)
+        end
+      end
     end
   end
 end

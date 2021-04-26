@@ -1,5 +1,5 @@
 class Api::V1::ProjectsController < ApplicationController
-  before_action :require_admin
+  before_action :require_admin, only: :create
 
   api :POST, '/v1/projects'
   param :name, String, desc: 'name of the project'
@@ -31,7 +31,12 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def index
-    @projects = Project.all
+    @projects =
+      if current_user.admin?
+        Project.all
+      else
+        current_user.projects
+      end
 
     render 'index'
   end
@@ -58,12 +63,17 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.find(params[:id])
+    @project =
+      if current_user.admin?
+        Project.find(params[:id])
+      else
+        current_user.projects.where(id: params[:id]).first
+      end
 
     if @project
       render 'show'
     else
-      render json: @project.errors, status: :unprocessable_entity
+      render json: { error: 'Not found' }, status: :not_found
     end
   end
 

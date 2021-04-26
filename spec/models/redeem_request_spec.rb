@@ -5,7 +5,7 @@ RSpec.describe RedeemRequest, :type => :model do
   
   context 'when created' do
     it 'creates a debit transaction record' do
-      expect { create_redeem_request }.to change { PointsTransaction }.by 1
+      expect { create_redeem_request }.to change { PointsTransaction.count }.by 1
     end
 
     it 'adds txn type as debit' do
@@ -15,7 +15,7 @@ RSpec.describe RedeemRequest, :type => :model do
 
     it 'adds points to be debited' do
       redeem_request = create_redeem_request
-      expect(redeem_request.points_transaction.points).to eq 100
+      expect(redeem_request.points_transaction.points).to eq -100
     end
   end
 end

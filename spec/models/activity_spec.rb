@@ -6,7 +6,7 @@ RSpec.describe Activity, :type => :model do
   context 'when state changes' do
     context 'pending to approved' do
       it 'creates a credit transaction record' do
-        expect { activity.approve }.to change { PointsTransaction }.by 1
+        expect { activity.approve }.to change { PointsTransaction.count }.by 1
       end
 
       it 'adds txn type as credit' do
@@ -22,7 +22,7 @@ RSpec.describe Activity, :type => :model do
 
     context 'pending to rejected' do
       it 'does not create a transaction record' do
-        expect { activity.reject }.not_to change { PointsTransaction }
+        expect { activity.reject }.not_to change { PointsTransaction.count }
       end
     end
   end

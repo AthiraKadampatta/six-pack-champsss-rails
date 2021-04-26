@@ -14,7 +14,7 @@ describe Api::V1::UsersController, type: :request do
 
     it 'has user and total points in response' do
       show_users_api
-      expect(json_response.keys).to include(:user, :total_points)
+      expect(json_response.keys).to include(:user, :points)
     end
 
     it 'has required keys in user' do
@@ -22,9 +22,9 @@ describe Api::V1::UsersController, type: :request do
       expect(json_response[:user].keys).to include(:id, :name, :token, :email, :role)
     end
 
-    it 'has required keys in total_points' do
+    it 'has required keys in points' do
       show_users_api
-      expect(json_response[:total_points].map(&:keys).flatten.uniq).to include(:project_name, :points)
+      expect(json_response[:points].keys).to include(:total_points, :available_points, :redeemed_points, :projects)
     end
   end
 

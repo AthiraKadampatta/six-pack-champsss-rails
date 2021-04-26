@@ -1,6 +1,11 @@
 json.user @user
-json.total_points do
-  json.array! [{ project_name: "KFC", points: 100 }, { project_name: 'Hiring', points: 200 }]
+json.points do
+  json.total_points @user.total_points
+  json.available_points @user.available_points
+  json.redeemed_points @user.redeemed_points
+  json.projects @user.points_per_project.each do |project_name, points|
+    json.project_name project_name
+    json.total_points points
+  end
 end
-json.available_points 150
-json.redeemed_points 150
+

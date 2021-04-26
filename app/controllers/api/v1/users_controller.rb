@@ -2,6 +2,12 @@ class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :assign_role, :destroy]
   before_action :require_admin, only: [:assign_role, :destroy]
 
+  api :GET, '/v1/users/', 'All users List'
+  def index
+    @users = User.all
+    render json: @users, status: :ok
+  end
+
   api :GET, '/v1/users/:id', 'User Profile Details'
   param :id, :number, desc: 'id of the user', required: true
   returns code: 200, desc: "Detailed info of the user" do

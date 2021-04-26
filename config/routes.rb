@@ -11,6 +11,14 @@ Rails.application.routes.draw do
 
       resources :users
       resources :activities
+      namespace :admin do
+        resources :activities, only: :index do
+          member do
+            put 'approve'
+            put 'reject'
+          end
+        end
+      end
 
       post 'auth/login', to: "sessions#login"
       resources :projects do

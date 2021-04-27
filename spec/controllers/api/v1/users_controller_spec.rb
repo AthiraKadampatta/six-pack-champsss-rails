@@ -3,6 +3,15 @@ require 'rails_helper'
 describe Api::V1::UsersController, type: :request do
   before { sign_in_as(users(:associate_one)) }
 
+  describe 'index' do
+    subject(:index_users_api) { get "/api/v1/users/", headers: { 'Authorization' => 'dummy' } }
+
+    it 'returns all users' do
+      index_users_api
+      expect(JSON.parse(response.body).size).to eq User.count
+    end
+  end
+
   describe 'show' do
     let(:user) { users(:associate_one) }
     subject(:show_users_api) { get "/api/v1/users/#{user.id}", headers: { 'Authorization' => 'dummy' } }
@@ -14,7 +23,7 @@ describe Api::V1::UsersController, type: :request do
 
     it 'has user and total points in response' do
       show_users_api
-      expect(json_response.keys).to include(:user, :total_points)
+      expect(json_response.keys).to include(:user, :points)
     end
 
     it 'has required keys in user' do
@@ -22,9 +31,9 @@ describe Api::V1::UsersController, type: :request do
       expect(json_response[:user].keys).to include(:id, :name, :token, :email, :role)
     end
 
-    it 'has required keys in total_points' do
+    it 'has required keys in points' do
       show_users_api
-      expect(json_response[:total_points].map(&:keys).flatten.uniq).to include(:project_name, :points)
+      expect(json_response[:points].keys).to include(:total_points, :available_points, :redeemed_points, :projects)
     end
   end
 

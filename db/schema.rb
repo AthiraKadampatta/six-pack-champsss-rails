@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_24_132637) do
+ActiveRecord::Schema.define(version: 2021_04_26_172122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,12 +20,12 @@ ActiveRecord::Schema.define(version: 2021_04_24_132637) do
     t.integer "duration"
     t.integer "project_id"
     t.integer "user_id"
-    t.integer "points_requested"
+    t.integer "points_requested", default: 0
     t.datetime "performed_on"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "status"
-    t.integer "points_granted"
+    t.integer "points_granted", default: 0
     t.integer "reviewed_by"
     t.datetime "reviewed_at"
     t.index ["project_id"], name: "index_activities_on_project_id"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2021_04_24_132637) do
     t.integer "transactable_id"
     t.string "transactable_type"
     t.integer "points"
-    t.integer "type"
+    t.integer "txn_type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

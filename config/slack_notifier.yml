@@ -1,0 +1,17 @@
+development:
+  slack_incoming_webhook: https://hooks.slack.com/services/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
+  slack_app_token: xoxb-322901699254-2002385917043-H8Y9KUXvXWLOVk2KI5LYWp79
+  slack_email_override: rewards
+  slack_channel_prefix: dev_
+
+test:
+  slack_incoming_webhook: https://slack.com
+  slack_app_token: xoxp-abcd123
+  slack_email_override: rewards
+  slack_channel_prefix: test_
+
+production:
+  slack_incoming_webhook: https://hooks.slack.com/services/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
+  slack_app_token: xoxb-322901699254-2002385917043-H8Y9KUXvXWLOVk2KI5LYWp79
+  slack_email_override: rewards
+  slack_channel_prefix:

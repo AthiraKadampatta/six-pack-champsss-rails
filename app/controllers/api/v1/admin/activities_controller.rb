@@ -30,10 +30,11 @@ class Api::V1::Admin::ActivitiesController < ApplicationController
   end
 
   api :GET, 'v1/admin/activities', 'Lists all activities of all users based on status'
-  param :status, String, required: true
+  param :status, String, desc: 'status : pending, approved or rejected', required: true
 
   def index
     @activities = Activity.where(status: params[:status])
+    @activities = params[:status] == 'pending' ? @activities.order('created_at ASC') : @activities.order('updated_at DESC')
     render json: @activities
   end
 

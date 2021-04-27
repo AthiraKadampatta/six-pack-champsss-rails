@@ -29,6 +29,14 @@ class Api::V1::Admin::ActivitiesController < ApplicationController
     end
   end
 
+  api :GET, 'v1/admin/activities', 'Lists all activities of all users based on status'
+  param :status, String, required: true
+
+  def index
+    @activities = Activity.where(status: params[:status])
+    render json: @activities
+  end
+
   private
 
   def set_activity

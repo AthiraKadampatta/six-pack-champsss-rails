@@ -31,6 +31,6 @@ class ApplicationController < ActionController::API
   end
 
   def require_admin
-    head :unauthorized unless (current_user.admin? || current_user.owner?)
+    head :forbidden unless (current_user.admin? || current_user.owner?)
   end
 end

@@ -146,9 +146,9 @@ describe Api::V1::ProjectsController, type: :request do
     context 'when non-admin is logged in' do
       before { sign_in_as(users(:associate_one)) }
 
-      it 'returns 401 status' do
+      it 'returns 403 status' do
         update_project_api
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -184,9 +184,9 @@ describe Api::V1::ProjectsController, type: :request do
     context 'when associate is logged in' do
       before { sign_in_as(users(:associate_one)) }
 
-      it 'returns 401 status' do
+      it 'returns 403 status' do
         destroy_project_api
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end

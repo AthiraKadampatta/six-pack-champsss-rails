@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
       resources :users
       resources :activities
+      resources :redeem_requests, only: :create
 
       post 'auth/login', to: "sessions#login"
       resources :projects do

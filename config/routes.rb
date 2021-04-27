@@ -11,6 +11,15 @@ Rails.application.routes.draw do
 
       resources :users
       resources :activities
+      
+      namespace :admin do
+        resources :activities, only: :index do
+          member do
+            put 'approve'
+            put 'reject'
+          end
+        end
+      end
       resources :redeem_requests, only: :create
 
       post 'auth/login', to: "sessions#login"

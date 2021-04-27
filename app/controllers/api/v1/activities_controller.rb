@@ -10,7 +10,7 @@ class Api::V1::ActivitiesController < ApplicationController
     render json: @activities
   end
 
-  api :POST, 'v1/activities', 'Creates a user activity'
+  api :POST, '/v1/activities', 'Creates a user activity'
   param :activity, Hash, desc: 'Activity info' do
     param :description, String, desc: 'Description of the activity', required: true
     param :duration, :number, desc: 'Activity duration in minutes', required: true
@@ -28,7 +28,7 @@ class Api::V1::ActivitiesController < ApplicationController
     end
   end
 
-  api :PUT, 'v1/activities/:id', 'Updates "pending" activity only'
+  api :PUT, '/v1/activities/:id', 'Updates "pending" activity only'
   param :id, :number, required: true
   param :activity, Hash, desc: 'Activity info' do
     param :description, String, required: true
@@ -48,7 +48,7 @@ class Api::V1::ActivitiesController < ApplicationController
     end
   end
 
-  api :DELETE, 'v1/activities/:id', 'Deletes "pending" activity only'
+  api :DELETE, '/v1/activities/:id', 'Deletes "pending" activity only'
   param :id, :number, required: true
 
   def destroy

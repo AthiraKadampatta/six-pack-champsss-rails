@@ -10,6 +10,9 @@ class Api::V1::Admin::ActivitiesController < ApplicationController
   def approve
     return head :not_found unless @activity
 
+    set_review_details_for_activity
+    @activity.points_granted = params[:activity][:points_granted]
+
     if @activity.approve!
       render json: @activity, status: :ok
     else
@@ -21,6 +24,8 @@ class Api::V1::Admin::ActivitiesController < ApplicationController
   param :id, :number, required: true
   def reject
     return head :not_found unless @activity
+
+    set_review_details_for_activity
 
     if @activity.reject!
       render json: @activity, status: :ok
@@ -34,7 +39,7 @@ class Api::V1::Admin::ActivitiesController < ApplicationController
 
   def index
     @activities = Activity.where(status: params[:status])
-    @activities = params[:status] == 'pending' ? @activities.order('created_at ASC') : @activities.order('updated_at DESC')
+    @activities = @activities.order(order_by_status)
     render json: @activities
   end
 
@@ -42,5 +47,14 @@ class Api::V1::Admin::ActivitiesController < ApplicationController
 
   def set_activity
     @activity = Activity.find(params[:id])
+  end
+
+  def set_review_details_for_activity
+    @activity.reviewed_by = current_user.id
+    @activity.reviewed_at = Time.current
+  end
+
+  def order_by_status
+    params[:status] == 'pending' ? 'created_at ASC' : 'updated_at DESC'
   end
 end

@@ -31,6 +31,16 @@ describe Api::V1::Admin::ActivitiesController, type: :request do
         approve_request
         expect(activity.reload.approved?).to be true
       end
+
+      it 'updates points_granted' do
+        approve_request
+        expect(activity.reload.points_granted).to eq 200
+      end
+
+      it 'updates reviewer details' do
+        approve_request
+        expect(activity.reload.reviewed_by).to eq(users(:admin_one).id)
+      end
     end
   end
 
@@ -60,6 +70,11 @@ describe Api::V1::Admin::ActivitiesController, type: :request do
       it 'changes state of activity to rejected' do
         reject_request
         expect(activity.reload.rejected?).to be true
+      end
+
+      it 'updates reviewer details' do
+        reject_request
+        expect(activity.reload.reviewed_by).to eq(users(:admin_one).id)
       end
     end
   end

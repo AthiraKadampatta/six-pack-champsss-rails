@@ -1,0 +1,11 @@
+redeem_pending:
+  id: 1
+  user_id: 1
+  points: 500
+  status: 0
+
+redeem_completed:
+  id: 2
+  user_id: 1
+  points: 500
+  status: 1

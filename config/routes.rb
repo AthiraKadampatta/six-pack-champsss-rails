@@ -3,14 +3,19 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
+      resources :activities
+      resources :redeem_requests, only: :create
       resources :users do
         member do
           put 'assign_role'
         end
       end
 
-      resources :users
-      resources :activities
+      post 'auth/login', to: "sessions#login"
+
+      resources :projects do
+        resources :users, controller: 'projects/users', only: :create
+      end
 
       namespace :admin do
         resources :activities, only: :index do
@@ -19,12 +24,12 @@ Rails.application.routes.draw do
             put 'reject'
           end
         end
-      end
-      resources :redeem_requests, only: :create
 
-      post 'auth/login', to: "sessions#login"
-      resources :projects do
-        resources :users, controller: 'projects/users', only: :create
+        resources :redeem_requests, only: :index do
+          member do
+            put 'mark_complete'
+          end
+        end
       end
     end
   end

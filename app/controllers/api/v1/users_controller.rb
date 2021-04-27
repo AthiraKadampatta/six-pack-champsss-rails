@@ -33,7 +33,7 @@ class Api::V1::UsersController < ApplicationController
   end
   returns code: 200
   def update
-    head :unauthorized and return if @user != current_user
+    head :forbidden and return if @user != current_user
 
     if @user.update(user_params)
       render json: @user

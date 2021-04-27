@@ -13,9 +13,9 @@ describe Api::V1::Admin::ActivitiesController, type: :request do
     context 'when non-admin is logged in' do
       before { sign_in_as(users(:associate_one)) }
 
-      it 'returns 401' do
+      it 'returns 403' do
         approve_request
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -43,9 +43,9 @@ describe Api::V1::Admin::ActivitiesController, type: :request do
     context 'when non-admin is logged in' do
       before { sign_in_as(users(:associate_one)) }
 
-      it 'returns 401' do
+      it 'returns 403' do
         reject_request
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -77,10 +77,10 @@ describe Api::V1::Admin::ActivitiesController, type: :request do
     context 'when requested by a non admin' do
       before { sign_in_as(users(:associate_one)) }
 
-      it 'returns status 401' do
+      it 'returns status 403' do
         admin_index_request
 
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 

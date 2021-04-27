@@ -64,7 +64,7 @@ describe Api::V1::Admin::ActivitiesController, type: :request do
     end
   end
 
-  describe 'admin_index' do
+  describe 'index' do
     before { sign_in_as(users(:admin_one)) }
 
     let(:pending_activities) { Activity.pending.to_json }

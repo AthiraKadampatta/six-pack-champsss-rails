@@ -138,4 +138,56 @@ describe Api::V1::ProjectsController, type: :request do
       end
     end
   end
+
+  describe '#update' do
+    let(:project) { projects(:one) }
+    subject(:update_project_api) { put "/api/v1/projects/#{project.id}", params: { project: { name: 'ABC' } }, headers: { 'Authorization' => 'dummy' } }
+
+    context 'when non-admin is logged in' do
+      before { sign_in_as(users(:associate_one)) }
+
+      it 'returns 401 status' do
+        update_project_api
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when admin is logged in' do
+      it 'returns 200 status' do
+        update_project_api
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'updates the name' do
+        update_project_api
+        expect(project.reload.name).to eq 'ABC'
+      end
+    end
+  end
+
+  describe 'destroy' do
+    let(:project) { projects(:one) }
+
+    subject(:destroy_project_api) { delete "/api/v1/projects/#{project.id}", headers: { 'Authorization' => 'dummy' } }
+
+    context 'when admin is logged in' do
+      it 'returns 200 status' do
+        destroy_project_api
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'destroys the project' do
+        expect { destroy_project_api }.to change { Project.count }.by -1
+      end
+    end
+
+    context 'when associate is logged in' do
+      before { sign_in_as(users(:associate_one)) }
+
+      it 'returns 401 status' do
+        destroy_project_api
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end

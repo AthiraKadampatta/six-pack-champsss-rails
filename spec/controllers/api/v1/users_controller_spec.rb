@@ -8,7 +8,7 @@ describe Api::V1::UsersController, type: :request do
 
     it 'returns all users' do
       index_users_api
-      expect(JSON.parse(response.body).size).to eq User.count
+      expect(json_response.size).to eq User.count
     end
   end
 

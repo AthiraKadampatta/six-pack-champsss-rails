@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_many :activities
   has_many :points_transactions
   has_many :redeem_requests
+  has_many :user_milestones
+  has_many :milestones, through: :user_milestones
 
   enum role: ['owner', 'admin', 'associate']
 
@@ -30,6 +32,15 @@ class User < ApplicationRecord
 
   def admin_or_owner?
     admin? || owner?
+  end
+
+  def add_milestone
+    Milestone.desc.each do |milestone|
+      if total_points > milestone.value
+        user_milestones.find_or_create_by!(milestone_id: milestone.id)
+        break
+      end
+    end
   end
 
   private

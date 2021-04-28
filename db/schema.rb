@@ -32,6 +32,12 @@ ActiveRecord::Schema.define(version: 2021_04_29_121445) do
     t.index ["user_id"], name: "index_activities_on_user_id"
   end
 
+  create_table "milestones", force: :cascade do |t|
+    t.integer "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "points_transactions", force: :cascade do |t|
     t.integer "user_id"
     t.integer "transactable_id"
@@ -61,6 +67,14 @@ ActiveRecord::Schema.define(version: 2021_04_29_121445) do
     t.integer "points"
     t.integer "status"
     t.integer "reward_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_milestones", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "milestone_id"
+    t.boolean "published_to_slack", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

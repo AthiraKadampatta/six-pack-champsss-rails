@@ -79,7 +79,7 @@ class Api::V1::ProjectsController < ApplicationController
 
   def show
     @project =
-      if current_user.admin?
+      if current_user.admin_or_owner?
         Project.find(params[:id])
       else
         current_user.projects.where(id: params[:id]).first

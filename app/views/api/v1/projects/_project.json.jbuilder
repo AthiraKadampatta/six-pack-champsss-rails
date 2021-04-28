@@ -1,4 +1,4 @@
-project_users = @current_user.admin? ? project.users : [@current_user]
+project_users = @current_user.admin_or_owner? ? project.users : [@current_user]
 
 json.id              project.id
 json.name            project.name

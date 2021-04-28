@@ -2,7 +2,7 @@ class Api::V1::Admin::RedeemRequestsController < ApplicationController
   before_action :require_admin_or_owner
   before_action :set_redeem_request, only: [:mark_complete]
 
-  api :GET, 'v1/redeem_requests', 'List of all pending/completed redeem_requests'
+  api :GET, '/v1/redeem_requests', 'List of all pending/completed redeem_requests'
   param :status, String, desc: 'status : pending or completed', required: true
 
   def index
@@ -13,6 +13,7 @@ class Api::V1::Admin::RedeemRequestsController < ApplicationController
 
   api :POST, '/v1/admin/redeem_requests/:id/mark_complete', 'Mark action as completed by admin'
   param :id, :number, required: true
+
   def mark_complete
     return head :not_found unless @redeem_request
 

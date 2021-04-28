@@ -55,13 +55,13 @@ describe Api::V1::Projects::UsersController, type: :request do
       project.users << [user1, user2]
     end
 
-    subject(:delete_project_users_api) { put "/api/v1/projects/#{project.id}/users/remove", params: { user_ids: [1, 3] }, headers: { 'Authorization' => 'dummy' } }
+    subject(:remove_project_users_api) { put "/api/v1/projects/#{project.id}/users/remove", params: { user_ids: [1, 3] }, headers: { 'Authorization' => 'dummy' } }
 
     context 'when requested by member' do
       before { sign_in_as(users(:associate_one)) }
 
       it 'returns 403 status' do
-        delete_project_users_api
+        remove_project_users_api
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -70,8 +70,8 @@ describe Api::V1::Projects::UsersController, type: :request do
       before { sign_in_as(users(:admin_one)) }
 
       it 'deletes requested users' do
-        delete_project_users_api
-        expect(project.users.map(&:id)).not_to include([1])
+        remove_project_users_api
+        expect(project.users.reload.map(&:id)).not_to include(1)
       end
     end
   end

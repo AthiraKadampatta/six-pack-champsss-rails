@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :assign_role, :destroy]
-  before_action :require_admin, only: [:assign_role, :destroy]
+  before_action :require_admin_or_owner, only: [:assign_role, :destroy]
 
   api :GET, '/v1/users/', 'All users List'
   def index

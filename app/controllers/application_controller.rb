@@ -30,7 +30,7 @@ class ApplicationController < ActionController::API
     http_token && auth_token && auth_token[:email]
   end
 
-  def require_admin
-    head :forbidden unless (current_user.admin? || current_user.owner?)
+  def require_admin_or_owner
+    head :forbidden unless current_user.admin_or_owner?
   end
 end

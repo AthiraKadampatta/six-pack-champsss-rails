@@ -1,5 +1,5 @@
 class Api::V1::Admin::ActivitiesController < ApplicationController
-  before_action :require_admin
+  before_action :require_admin_or_owner
   before_action :set_activity, only: [:approve, :reject]
 
   api :POST, '/v1/admin/activities/:id/approve', 'Approve an activity by admin'

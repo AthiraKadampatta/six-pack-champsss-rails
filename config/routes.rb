@@ -14,7 +14,11 @@ Rails.application.routes.draw do
       post 'auth/login', to: "sessions#login"
 
       resources :projects do
-        resources :users, controller: 'projects/users', only: :create
+        resources :users, controller: 'projects/users', only: :create do
+          collection do
+            put 'remove'
+          end
+        end
       end
 
       namespace :admin do

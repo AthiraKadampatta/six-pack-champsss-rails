@@ -30,7 +30,7 @@ describe Api::V1::Projects::UsersController, type: :request do
             post "/api/v1/projects/#{project.id}/users", params: { user_ids: [1, 4] }, headers: { 'Authorization' => 'dummy' }
           }.to change { project.users.count }.by 1
 
-          expect(json_response[:message]).to eq 'Added 1 user to Test Project, Failed to add 1 user'
+          expect(json_response[:message]).to eq 'Added 1 user to Test Project'
           expect(json_response[:failed_ids]).to eq ['4']
         end
       end

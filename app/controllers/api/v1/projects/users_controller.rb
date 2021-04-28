@@ -13,15 +13,12 @@ class Api::V1::Projects::UsersController < ApplicationController
       # so retrive user_ids from params
       # only if user is present in db
       users = User.where(id: params[:user_ids])
-      user_ids = users.pluck(:id)
-      @project.users << users
+      users_to_add = users - @project.users
+      user_ids = users_to_add.pluck(:id)
+      @project.users << users_to_add
 
-      message =
-        if (@failed_ids = params[:user_ids] - user_ids.map(&:to_s)).any?
-          "Added #{user_ids.count} #{'user'.pluralize(user_ids.count)} to #{@project.name}, Failed to add #{@failed_ids.count} #{'user'.pluralize(@failed_ids.count)}"
-        else
-          "Added #{user_ids.count} users to #{@project.name}"
-        end
+      message = "Added #{user_ids.count} #{'user'.pluralize(user_ids.count)} to #{@project.name}"
+      @failed_ids = params[:user_ids] - user_ids.map(&:to_s)
 
       render json: { message: message, failed_ids:  @failed_ids }, status: 200
     else

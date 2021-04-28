@@ -28,6 +28,10 @@ class User < ApplicationRecord
     points_transactions.debit.inject(0) {|res, pt| res + pt.points}.abs
   end
 
+  def admin_or_owner?
+    admin? || owner?
+  end
+
   private
 
   def extract_name_from_email

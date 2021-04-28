@@ -1,5 +1,5 @@
 class Api::V1::ProjectsController < ApplicationController
-  before_action :require_admin, only: [:create, :update, :destroy]
+  before_action :require_admin_or_owner, only: [:create, :update, :destroy]
   before_action :set_project, only: [:destroy, :update]
 
   api :POST, '/v1/projects', desc: 'Create a new project by admin'
@@ -47,7 +47,7 @@ class Api::V1::ProjectsController < ApplicationController
 
   def index
     @projects =
-      if current_user.admin?
+      if current_user.admin_or_owner?
         Project.all
       else
         current_user.projects

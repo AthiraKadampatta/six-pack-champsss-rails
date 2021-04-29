@@ -1,10 +1,10 @@
 class Api::V1::Admin::ProjectsController < ApplicationController
   before_action :require_admin_or_owner
-  before_action :set_project, only: [:destroy, :update]
+  before_action :set_project, only: [:archive, :update]
 
   api :GET, '/v1/admin/projects', 'List of projects for user. List of all projects for admin'
   def index
-    @projects = Project.all
+    @projects = Project.not_archived.all
   end
 
   api :POST, '/v1/admin/projects', 'Create a new project by admin'
@@ -34,17 +34,14 @@ class Api::V1::Admin::ProjectsController < ApplicationController
     end
   end
 
-  api :DELETE, '/v1/admin/projects/:id', 'Delete a project by admin'
-  param :id, :number, desc: 'ID of the project to be deleted'
+  api :PUT, '/v1/admin/projects/:id/archive', 'Archive a project by admin'
+  param :id, :number, desc: 'ID of the project to be archived'
 
-  def destroy
+  def archive
     return head :not_found unless @project
 
-    if @project.destroy
-      render json: { message: 'Project deleted successfully!'}, status: :ok
-    else
-      render json: { message: @project.errors }, status: :unprocessable_entity
-    end
+    @project.archive
+    head :ok
   end
 
   private

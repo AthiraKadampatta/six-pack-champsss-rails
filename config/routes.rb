@@ -22,7 +22,11 @@ Rails.application.routes.draw do
       end
 
       namespace :admin do
-        resources :projects
+        resources :projects do
+          member do
+            put 'archive'
+          end
+        end
         resources :activities, only: :index do
           member do
             put 'approve'

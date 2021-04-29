@@ -53,19 +53,19 @@ describe Api::V1::Admin::ProjectsController, type: :request do
     end
   end
 
-  describe 'destroy' do
+  describe 'archive' do
     let(:project) { projects(:one) }
 
-    subject(:destroy_project_api) { delete "/api/v1/admin/projects/#{project.id}", headers: { 'Authorization' => 'dummy' } }
+    subject(:archive_project_api) { put "/api/v1/admin/projects/#{project.id}/archive", headers: { 'Authorization' => 'dummy' } }
 
     context 'when admin is logged in' do
       it 'returns 200 status' do
-        destroy_project_api
+        archive_project_api
         expect(response).to have_http_status(:success)
       end
 
-      it 'destroys the project' do
-        expect { destroy_project_api }.to change { Project.count }.by -1
+      it 'archives the project' do
+        expect { archive_project_api }.to change { Project.not_archived.count }.by -1
       end
     end
 
@@ -73,7 +73,7 @@ describe Api::V1::Admin::ProjectsController, type: :request do
       before { sign_in_as(users(:associate_one)) }
 
       it 'returns 403 status' do
-        destroy_project_api
+        archive_project_api
         expect(response).to have_http_status(:forbidden)
       end
     end

@@ -17,7 +17,7 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def index
-    @projects = current_user.projects
+    @projects = current_user.projects.not_archived
 
     render 'index'
   end
@@ -46,9 +46,9 @@ class Api::V1::ProjectsController < ApplicationController
   def show
     @project =
       if current_user.admin_or_owner?
-        Project.find(params[:id])
+        Project.not_archived.find(params[:id])
       else
-        current_user.projects.where(id: params[:id]).first
+        current_user.projects.not_archived.where(id: params[:id]).first
       end
 
     return head :not_found unless @project

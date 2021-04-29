@@ -6,9 +6,8 @@ class Api::V1::Admin::RedeemRequestsController < ApplicationController
   param :status, String, desc: 'status : pending or completed', required: true
 
   def index
-    @redeem_requests = RedeemRequest.where(status: params[:status])
+    @redeem_requests = RedeemRequest.includes(:user).where(status: params[:status])
     @redeem_requests = @redeem_requests.order(order_by_status)
-    render json: @redeem_requests
   end
 
   api :POST, '/v1/admin/redeem_requests/:id/mark_complete', 'Mark action as completed by admin'

@@ -36,9 +36,6 @@ describe Api::V1::Admin::RedeemRequestsController, type: :request do
   describe 'index' do
     before { sign_in_as(users(:admin_one)) }
 
-    let(:pending_redeem_requests) { RedeemRequest.pending.to_json }
-    let(:completed_redeem_requests) { RedeemRequest.completed.to_json }
-
     subject(:all_redeem_requests) { get '/api/v1/admin/redeem_requests',
       params: {status: status}, headers: { 'Authorization' => 'dummy' } }
 
@@ -59,7 +56,19 @@ describe Api::V1::Admin::RedeemRequestsController, type: :request do
         all_redeem_requests
 
         expect(response).to have_http_status(:success)
-        expect(json_response.to_json).to eql pending_redeem_requests
+      end
+
+      it 'returns user_name' do
+        all_redeem_requests
+
+        expect(json_response.first.keys).to eql [:id, :user_id, :points, :status, :reward_id, :created_at, :updated_at, :user_name]
+      end
+
+      it 'returns only pending requests' do
+        all_redeem_requests
+
+        expect(json_response.first.values).to include('pending')
+        expect(json_response.first.values).not_to include('completed')
       end
     end
 
@@ -70,7 +79,13 @@ describe Api::V1::Admin::RedeemRequestsController, type: :request do
         all_redeem_requests
 
         expect(response).to have_http_status(:success)
-        expect(json_response.to_json).to eql completed_redeem_requests
+      end
+
+      it 'returns only completed requests' do
+        all_redeem_requests
+
+        expect(json_response.first.values).not_to include('pending')
+        expect(json_response.first.values).to include('completed')
       end
     end
   end

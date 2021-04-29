@@ -18,6 +18,11 @@ RSpec.describe Activity, :type => :model do
         activity.approve
         expect(activity.points_transaction.points).to eq 70
       end
+
+      it 'calls add_milestone on user' do
+        expect(activity.user).to receive(:add_milestone)
+        activity.approve
+      end
     end
 
     context 'pending to rejected' do

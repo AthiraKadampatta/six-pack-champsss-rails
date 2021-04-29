@@ -17,7 +17,7 @@ class Activity < ApplicationRecord
     event :approve do
       transitions from: :pending,
         to: :approved,
-        after: :credit_points!
+        after: [:credit_points!, :add_milestone]
     end
 
     event :reject do
@@ -28,6 +28,10 @@ class Activity < ApplicationRecord
 
   def credit_points!
     PointsTransaction.create!(transactable: self, txn_type: :credit, points: points_granted, user_id: user_id)
+  end
+
+  def add_milestone
+    user.add_milestone
   end
 
   def prevent_unless_status_pending

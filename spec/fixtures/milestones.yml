@@ -1,0 +1,11 @@
+milestone_1:
+  id: 1
+  value: 100
+
+milestone_2:
+  id: 2
+  value: 200
+
+milestone_3:
+  id: 3
+  value: 500

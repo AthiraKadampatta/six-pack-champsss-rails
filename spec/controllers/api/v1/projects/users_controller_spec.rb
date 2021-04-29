@@ -30,7 +30,6 @@ describe Api::V1::Projects::UsersController, type: :request do
             post "/api/v1/projects/#{project.id}/users", params: { user_ids: [1, 4] }, headers: { 'Authorization' => 'dummy' }
           }.to change { project.users.count }.by 1
 
-          expect(json_response[:message]).to eq 'Added 1 user to Test Project'
           expect(json_response[:failed_ids]).to eq ['4']
         end
       end
@@ -40,8 +39,7 @@ describe Api::V1::Projects::UsersController, type: :request do
       it 'returns error' do
         post "/api/v1/projects/20/users", params: { user_ids: [1, 4] }, headers: { 'Authorization' => 'dummy' }
 
-        expect(response.status).to eq 404
-        expect(json_response[:error]).to eq 'Project Not Found'
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

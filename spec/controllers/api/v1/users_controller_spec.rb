@@ -6,9 +6,20 @@ describe Api::V1::UsersController, type: :request do
   describe 'index' do
     subject(:index_users_api) { get "/api/v1/users/", headers: { 'Authorization' => 'dummy' } }
 
-    it 'returns all users' do
-      index_users_api
-      expect(json_response.size).to eq User.count
+    context 'when member requests' do
+      it 'returns 403 status' do
+        index_users_api
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when admin requests' do
+      before { sign_in_as(users(:admin_one)) }
+
+      it 'returns all users' do
+        index_users_api
+        expect(json_response.size).to eq User.count
+      end
     end
   end
 

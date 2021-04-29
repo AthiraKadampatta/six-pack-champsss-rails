@@ -1,6 +1,6 @@
 class Api::V1::RedeemRequestsController < ApplicationController
 
-  api :POST, 'v1/redeem_requests', 'Creates a redeem request for current_user'
+  api :POST, '/v1/redeem_requests', 'Creates a redeem request for current_user'
   param :redeem_request, Hash, desc: 'Redeem request info' do
     param :points, :number, desc: 'Points requested by the user', required: true
   end

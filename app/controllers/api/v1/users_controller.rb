@@ -1,37 +1,23 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :assign_role, :destroy]
-  before_action :require_admin_or_owner, only: [:assign_role, :destroy]
+  before_action :require_admin_or_owner, only: [:assign_role, :destroy, :index]
 
-  api :GET, '/v1/users/', 'All users List'
+  api :GET, '/v1/users/', 'All users List only for Admin'
   def index
     @users = User.all
     render json: @users, status: :ok
   end
 
   api :GET, '/v1/users/:id', 'User Profile Details'
-  param :id, :number, desc: 'id of the user', required: true
-  returns code: 200, desc: "Detailed info of the user" do
-    property :user, Hash do
-      property :id, Integer, desc: 'id of the requested user'
-      property :name, String, desc: 'Name of the user'
-      property :email, String, desc: 'Email of the user'
-      property :role, String, desc: 'Role of the user'
-      property :total_points, Hash, desc: 'Total points breakup based on projects' do
-        property :project_name, String, desc: 'Name of the project'
-        property :points, Integer, desc: 'Points claimed in the project'
-      end
-      property :available_points, Integer, desc: 'Balance points for a user'
-      property :redeemed_points, Integer, desc: 'Total points redeemed till date across projects'
-    end
-  end
+  param :id, :number, desc: 'ID of the user', required: true
   def show; end
 
   api :PUT, '/v1/users/:id', 'Update user details for self'
-  param :id, :number, desc: 'id of the user', required: true
+  param :id, :number, desc: 'ID of the user', required: true
   param :user, Hash, desc: 'User info' do
     param :name, String, desc: 'user name'
   end
-  returns code: 200
+
   def update
     head :forbidden and return if @user != current_user
 
@@ -43,11 +29,11 @@ class Api::V1::UsersController < ApplicationController
   end
 
   api :PUT, '/v1/users/:id/assign_role', 'Assign role to user by admin'
-  param :id, :number, desc: 'id of the user', required: true
+  param :id, :number, desc: 'ID of the user', required: true
   param :user, Hash, desc: 'User info' do
-    param :role, String, desc: 'New role id for the user', default: 'associate', required: true
+    param :role, String, desc: 'New role ID for the user', default: 'associate', required: true
   end
-  returns code: 200
+
   def assign_role
     if @user.update(role: params[:user][:role])
       render json: @user
@@ -57,7 +43,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   api :DELETE, '/v1/users/:id', 'Destroy a user by admin'
-  param :id, :number, desc: 'id of the user', required: true
+  param :id, :number, desc: 'ID of the user', required: true
+
   def destroy
     if @user.destroy
       head :ok and return

@@ -2,7 +2,7 @@ class Api::V1::ProjectsController < ApplicationController
   before_action :require_admin_or_owner, only: [:create, :update, :destroy]
   before_action :set_project, only: [:destroy, :update]
 
-  api :POST, '/v1/projects', desc: 'Create a new project by admin'
+  api :POST, '/v1/projects', 'Create a new project by admin'
   param :name, String, desc: 'name of the project'
 
   def create
@@ -15,7 +15,7 @@ class Api::V1::ProjectsController < ApplicationController
     end
   end
 
-  api :PUT, '/v1/projects/:id', desc: 'Update project details by admin'
+  api :PUT, '/v1/projects/:id', 'Update project details by admin'
   param :id, :number, desc: 'ID of the project to be updated'
   param :name, String, desc: 'name of the project'
 
@@ -29,7 +29,7 @@ class Api::V1::ProjectsController < ApplicationController
     end
   end
 
-  api :GET, '/v1/projects', desc: 'List of projects for user. List of all projects for admin'
+  api :GET, '/v1/projects', 'List of projects for user. List of all projects for admin'
   returns code: 200, desc: "All projects with users" do
     property :projects, array_of: Hash do
       property :name, String, desc: 'Name of project'
@@ -59,7 +59,7 @@ class Api::V1::ProjectsController < ApplicationController
   # Project list with users & points (show and index (include users))
   # && Make project level breakdown of points in user response dynamic
 
-  api :GET, '/v1/projects/:id', desc: 'Details of project'
+  api :GET, '/v1/projects/:id', 'Details of project'
   param :id, :number, desc: 'id of requested project'
   returns code: 200, desc: "Detailed info of the user" do
     property :projects, Hash, desc: 'Hash of projects' do
@@ -92,7 +92,7 @@ class Api::V1::ProjectsController < ApplicationController
     end
   end
 
-  api :DELETE, '/v1/projects/:id', desc: 'Delete a project by admin'
+  api :DELETE, '/v1/projects/:id', 'Delete a project by admin'
   param :id, :number, desc: 'ID of the project to be deleted'
 
   def destroy

@@ -5,7 +5,7 @@ describe Api::V1::RedeemRequestsController, type: :request do
 
   describe 'create' do
     let(:user) { users(:associate_one) }
-    subject(:create_redeem_request) { post "/api/v1/redeem_requests", params: { redeem_requests: { points: 100 } }, headers: { 'Authorization' => 'dummy' } }
+    subject(:create_redeem_request) { post "/api/v1/redeem_requests", params: { redeem_request: { points: 100 } }, headers: { 'Authorization' => 'dummy' } }
 
     it 'returns 200 status' do
       create_redeem_request

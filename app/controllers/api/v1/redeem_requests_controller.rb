@@ -17,6 +17,6 @@ class Api::V1::RedeemRequestsController < ApplicationController
   private
 
   def redeem_request_params
-    params.require(:redeem_requests).permit(:points)
+    params.require(:redeem_request).permit(:points)
   end
 end

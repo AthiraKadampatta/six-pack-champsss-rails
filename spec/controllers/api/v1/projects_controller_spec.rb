@@ -5,18 +5,17 @@ describe Api::V1::ProjectsController, type: :request do
 
   describe '#create' do
     it 'returns appropriate headers' do
-      post "/api/v1/projects", params: { project: { name: 'Test Project' } }, headers: { 'Authorization' => 'dummy' }
+      post "/api/v1/projects", params: { project: { name: 'Test Project new' } }, headers: { 'Authorization' => 'dummy' }
       expect(response.content_type).to include("application/json")
     end
 
     context 'with valid params' do
       it 'creates new project' do
         expect {
-          post "/api/v1/projects", params: { project: { name: 'Test Project' } }, headers: { 'Authorization' => 'dummy' }
+          post "/api/v1/projects", params: { project: { name: 'Test Project new' } }, headers: { 'Authorization' => 'dummy' }
         }.to change { Project.count }.by 1
 
         expect(response).to have_http_status(:success)
-        expect(json_response[:message]).to eq 'Project created successfully!'
       end
     end
 
@@ -26,13 +25,16 @@ describe Api::V1::ProjectsController, type: :request do
           post "/api/v1/projects", params: { project: { names: 'Invalid param' } }, headers: { 'Authorization' => 'dummy' }
         }.to change { Project.count }.by 0
 
-        expect(json_response[:message][:name]).to include 'can\'t be blank'
+        expect(json_response[:name]).to include 'can\'t be blank'
       end
     end
   end
 
   describe '#index' do
     let(:project) { projects :one }
+    before do
+      sign_in_as(users(:associate_one))
+    end
 
     subject(:index_projects_api) { get "/api/v1/projects", headers: { 'Authorization' => 'dummy' } }
 
@@ -41,43 +43,32 @@ describe Api::V1::ProjectsController, type: :request do
       expect(response.content_type).to include("application/json")
     end
 
-    it 'reutrns project users details' do
+    it 'returns project users details' do
       associate_one = users(:associate_one)
       associate_two = users(:associate_two)
 
-      project.user_ids = [associate_one.id, associate_two.id]
+      project.users << [associate_one, associate_two]
 
       index_projects_api
 
       expect(json_response[:projects].map { |p| p[:users].map{ |u| u[:name] } }).to match_array([
-        [],
         [associate_one.name,
         associate_two.name]
       ])
     end
 
-    context 'for admin user' do
-      it 'returns all projects' do
-        index_projects_api
-
-        expect(response).to have_http_status(:success)
-        expect(json_response[:projects].map { |p| p[:id] }).to match_array([1, 2])
-      end
-    end
-
-    context 'for non-admin user' do
+    context 'for any user' do
       let(:associate_one) { users :associate_one }
       let(:associate_two) { users :associate_two }
 
       before do
-        sign_in_as(users(:associate_one))
         project.user_ids = [associate_one.id]
       end
 
       it 'returns user\'s projects' do
         index_projects_api
 
-        expect(json_response[:projects].map { |p| p[:id] }).to match_array([1])
+        expect(json_response[:projects].map { |p| p[:id] }.compact).to match_array([1])
       end
     end
   end

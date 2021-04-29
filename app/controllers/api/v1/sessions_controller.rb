@@ -6,6 +6,8 @@ class Api::V1::SessionsController < ApplicationController
   def login
     begin
       payload = GoogleValidatorService.new(params[:id_token]).call
+      return head :unauthorized unless payload
+
       user = fetch_user_by_email(payload['email'], params)
 
       render json: {

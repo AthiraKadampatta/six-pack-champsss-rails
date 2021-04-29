@@ -5,6 +5,8 @@ class Activity < ApplicationRecord
   belongs_to :project
   has_one :points_transaction, as: :transactable
 
+  validates :points_requested, numericality: { greater_than: 0 }
+
   before_update :prevent_unless_status_pending, unless: -> { status_changed? }
 
   enum status: [:pending, :approved, :rejected]

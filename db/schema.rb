@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2021_04_29_153907) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "points_per_hour"
+    t.index ["name"], name: "index_projects_on_name", unique: true
   end
 
   create_table "projects_users", id: false, force: :cascade do |t|

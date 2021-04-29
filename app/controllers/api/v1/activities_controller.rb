@@ -7,7 +7,6 @@ class Api::V1::ActivitiesController < ApplicationController
   def index
     @activities = @current_user.activities
     @activities = @activities.where(status: params[:status]) if params[:status]
-    render json: @activities
   end
 
   api :POST, '/v1/activities', 'Creates a user activity'

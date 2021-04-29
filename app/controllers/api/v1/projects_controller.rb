@@ -1,35 +1,6 @@
 class Api::V1::ProjectsController < ApplicationController
-  before_action :require_admin_or_owner, only: [:create, :update, :destroy]
-  before_action :set_project, only: [:destroy, :update]
 
-  api :POST, '/v1/projects', 'Create a new project by admin'
-  param :name, String, desc: 'name of the project'
-
-  def create
-    @project = Project.create(project_params)
-
-    if @project.persisted?
-      render json: { message: 'Project created successfully!'}, status: :ok
-    else
-      render json: { message: @project.errors }, status: :unprocessable_entity
-    end
-  end
-
-  api :PUT, '/v1/projects/:id', 'Update project details by admin'
-  param :id, :number, desc: 'ID of the project to be updated'
-  param :name, String, desc: 'name of the project'
-
-  def update
-    return head :not_found unless @project
-
-    if @project.update(project_params)
-      render json: { message: 'Project updated successfully!'}, status: :ok
-    else
-      render json: { message: @project.errors }, status: :unprocessable_entity
-    end
-  end
-
-  api :GET, '/v1/projects', 'List of projects for user. List of all projects for admin'
+  api :GET, '/v1/projects', 'List of projects for user.'
   returns code: 200, desc: "All projects with users" do
     property :projects, array_of: Hash do
       property :name, String, desc: 'Name of project'
@@ -46,12 +17,7 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def index
-    @projects =
-      if current_user.admin_or_owner?
-        Project.all
-      else
-        current_user.projects
-      end
+    @projects = current_user.projects
 
     render 'index'
   end
@@ -85,33 +51,6 @@ class Api::V1::ProjectsController < ApplicationController
         current_user.projects.where(id: params[:id]).first
       end
 
-    if @project
-      render 'show'
-    else
-      render json: { error: 'Not found' }, status: :not_found
-    end
-  end
-
-  api :DELETE, '/v1/projects/:id', 'Delete a project by admin'
-  param :id, :number, desc: 'ID of the project to be deleted'
-
-  def destroy
     return head :not_found unless @project
-
-    if @project.destroy
-      render json: { message: 'Project deleted successfully!'}, status: :ok
-    else
-      render json: { message: @project.errors }, status: :unprocessable_entity
-    end
-  end
-
-  private
-
-  def project_params
-    params.require(:project).permit(:name, :points_per_hour)
-  end
-
-  def set_project
-    @project ||= Project.find(params[:id])
   end
 end

@@ -2,7 +2,7 @@ class Api::V1::Projects::UsersController < ApplicationController
   before_action :require_admin_or_owner
   before_action :set_project
 
-  api :POST, '/projects/:id/users', 'Add list of users to project'
+  api :POST, '/v1/projects/:id/users', 'Add list of users to project'
   param :project_id, :number, desc: 'ID of the project'
   param :user_ids, Array, desc: 'Array of user ids which we want to add to project'
 
@@ -29,7 +29,7 @@ class Api::V1::Projects::UsersController < ApplicationController
     end
   end
 
-  api :PUT, '/projects/:id/users/remove', 'REMOVE list of users from project'
+  api :PUT, '/v1/projects/:id/users/remove', 'REMOVE list of users from project'
   param :project_id, :number, desc: 'ID of the project'
   param :user_ids, Array, desc: 'Array of user ids which we want to remove from project'
 

@@ -36,7 +36,7 @@ class User < ApplicationRecord
 
   def add_milestone
     Milestone.desc.each do |milestone|
-      if total_points > milestone.value
+      if total_points >= milestone.value
         user_milestones.find_or_create_by!(milestone_id: milestone.id)
         break
       end

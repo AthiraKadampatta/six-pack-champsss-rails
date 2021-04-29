@@ -9,9 +9,9 @@ class Api::V1::ProjectsController < ApplicationController
     @project = Project.create(project_params)
 
     if @project.persisted?
-      render json: { message: 'Project created successfully!'}, status: :ok
+      render json: @project, status: :ok
     else
-      render json: { message: @project.errors }, status: :unprocessable_entity
+      render json: @project.errors, status: :unprocessable_entity
     end
   end
 
@@ -23,9 +23,9 @@ class Api::V1::ProjectsController < ApplicationController
     return head :not_found unless @project
 
     if @project.update(project_params)
-      render json: { message: 'Project updated successfully!'}, status: :ok
+      render json: @project, status: :ok
     else
-      render json: { message: @project.errors }, status: :unprocessable_entity
+      render json: @project.errors, status: :unprocessable_entity
     end
   end
 
@@ -85,11 +85,7 @@ class Api::V1::ProjectsController < ApplicationController
         current_user.projects.where(id: params[:id]).first
       end
 
-    if @project
-      render 'show'
-    else
-      render json: { error: 'Not found' }, status: :not_found
-    end
+    return head :not_found unless @project
   end
 
   api :DELETE, '/v1/projects/:id', 'Delete a project by admin'

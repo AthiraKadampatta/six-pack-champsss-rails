@@ -21,7 +21,7 @@ RSpec.describe Project, type: :model do
       end
 
       it 'when name with more than 3 characters' do
-        project = Project.new(name: 'Test Project')
+        project = Project.new(name: 'Test Project 3')
         expect(project.valid?).to be true
       end
     end

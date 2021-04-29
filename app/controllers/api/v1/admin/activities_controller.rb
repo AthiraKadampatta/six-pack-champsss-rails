@@ -40,7 +40,6 @@ class Api::V1::Admin::ActivitiesController < ApplicationController
   def index
     @activities = Activity.where(status: params[:status])
     @activities = @activities.order(order_by_status)
-    render json: @activities
   end
 
   private

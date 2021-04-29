@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'https://kipklaps.vercel.app', 'http://localhost:4000'
+    origins ENV['CORS_ORIGINS']&.split(',') || '*'
 
     resource '*',
       headers: :any,

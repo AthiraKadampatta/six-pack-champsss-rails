@@ -3,6 +3,8 @@ class Api::V1::SessionsController < ApplicationController
 
   api :POST, '/v1/auth/login', 'Create session and user for login'
   param :id_token, String, description: 'id_token returned by Google auth api', required: true
+  param :name, String, description: 'name of the user'
+  param :image, String, description: 'profile image url provided by google'
   def login
     begin
       payload = GoogleValidatorService.new(params[:id_token]).call

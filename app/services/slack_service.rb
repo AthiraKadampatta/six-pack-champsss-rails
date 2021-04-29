@@ -4,7 +4,7 @@ class SlackService
   end
 
   def self.send_message(vars)
-    recipient_id = slack_recipient(vars[:email], vars[:channel])
+    recipient_id = slack_recipient(vars[:channel])
     body = { text: replace_html_tag(vars[:message]), channel: recipient_id }
     body[:attachments] = vars[:attachments] if vars[:attachments].present?
 
@@ -15,30 +15,13 @@ class SlackService
     ActionView::Base.new(nil, {}, nil).strip_tags(message.gsub('</br>', "\n").gsub("&nbsp;", ""))
   end
 
-  def self.slack_recipient(email, channel)
-    channel = email.present? ? get_slack_id(SLACK_EMAIL_OVERRIDE || email) : slack_channel_name(channel)
+  def self.slack_recipient(channel)
+    channel = slack_channel_name(channel)
     channel || SLACK_EMAIL_OVERRIDE
   end
 
   def self.slack_channel_name(base = nil)
     return SLACK_EMAIL_OVERRIDE if base.blank?
     SLACK_CHANNEL_PREFIX + base
-  end
-
-  def self.get_slack_id(email)
-    user_data = get_slack_member_details(email)
-    user_data['id'] if user_data
-  end
-
-  def self.get_slack_member_name(email)
-    user_data = get_slack_member_details(email)
-    user_data['profile']['real_name'] if user_data
-  end
-
-  def self.get_slack_member_details(email)
-    response = Faraday.get('https://slack.com/api/users.lookupByEmail', params: { 'token' => SLACK_APP_TOKEN, 'email' => email })
-
-    user_data = ActiveSupport::JSON.decode(response)
-    user_data["user"]
   end
 end

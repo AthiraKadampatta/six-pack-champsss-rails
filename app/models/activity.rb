@@ -40,4 +40,14 @@ class Activity < ApplicationRecord
       throw(:abort)
     end
   end
+
+  def self.weekly_top_five_contibutors
+    Activity.approved
+      .where('reviewed_at >= ?', Time.zone.now - 7.days)
+      .group(:user_id)
+      .sum(:points_granted)
+      .reject{|k,v| v.zero?}
+      .sort_by{|k, v| -v}
+      .first(5)
+  end
 end

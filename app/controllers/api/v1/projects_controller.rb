@@ -29,7 +29,7 @@ class Api::V1::ProjectsController < ApplicationController
     end
   end
 
-  api :GET, '/v1/projects', 'List of projects for user. List of all projects for admin'
+  api :GET, '/v1/projects', 'List of projects for user.'
   returns code: 200, desc: "All projects with users" do
     property :projects, array_of: Hash do
       property :name, String, desc: 'Name of project'
@@ -46,12 +46,7 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def index
-    @projects =
-      if current_user.admin_or_owner?
-        Project.all
-      else
-        current_user.projects
-      end
+    @projects = current_user.projects
 
     render 'index'
   end

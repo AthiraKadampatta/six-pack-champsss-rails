@@ -21,7 +21,9 @@ describe Api::V1::ActivitiesController, type: :request do
         index_request
 
         expect(response).to have_http_status(:success)
-        expect(json_response.to_json).to eql pending_activities
+        expect(json_response.first.keys.flatten.map(&:to_s)).to  match(Activity.column_names.map(&:to_s))
+        expect(json_response.map { |x| x[:status] }).to  include('pending')
+        expect(json_response.map { |x| x[:status] }).not_to  include('approved')
       end
     end
 
@@ -32,7 +34,9 @@ describe Api::V1::ActivitiesController, type: :request do
         index_request
 
         expect(response).to have_http_status(:success)
-        expect(json_response.to_json).to eql approved_activities
+        expect(json_response.first.keys.flatten.map(&:to_s)).to  match(Activity.column_names)
+        expect(json_response.map { |x| x[:status] }).to  include('approved')
+        expect(json_response.map { |x| x[:status] }).not_to  include('pending')
       end
     end
 
@@ -43,7 +47,9 @@ describe Api::V1::ActivitiesController, type: :request do
         index_request
 
         expect(response).to have_http_status(:success)
-        expect(json_response.to_json).to eql rejected_activities
+        expect(json_response.first.keys.flatten.map(&:to_s)).to  match(Activity.column_names)
+        expect(json_response.map { |x| x[:status] }).to  include('rejected')
+        expect(json_response.map { |x| x[:status] }).not_to  include('approved')
       end
     end
   end

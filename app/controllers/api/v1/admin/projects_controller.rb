@@ -4,6 +4,5 @@ class Api::V1::Admin::ProjectsController < ApplicationController
   api :GET, '/v1/admin/projects', 'List of projects for user. List of all projects for admin'
   def index
     @projects = Project.all
-    render json: @projects
   end
 end

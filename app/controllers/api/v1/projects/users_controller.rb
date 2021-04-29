@@ -7,26 +7,12 @@ class Api::V1::Projects::UsersController < ApplicationController
   param :user_ids, Array, desc: 'Array of user ids which we want to add to project'
 
   def create
-    if @project
-      # to handle condition where from some user_ids
-      # user record is not present in db,
-      # so retrive user_ids from params
-      # only if user is present in db
-      users = User.where(id: params[:user_ids])
-      user_ids = users.pluck(:id)
-      @project.users << users
+    return head :not_found unless @project
 
-      message =
-        if (@failed_ids = params[:user_ids] - user_ids.map(&:to_s)).any?
-          "Added #{user_ids.count} #{'user'.pluralize(user_ids.count)} to #{@project.name}, Failed to add #{@failed_ids.count} #{'user'.pluralize(@failed_ids.count)}"
-        else
-          "Added #{user_ids.count} users to #{@project.name}"
-        end
+    set_users
+    @project.users << @users
 
-      render json: { message: message, failed_ids:  @failed_ids }, status: 200
-    else
-      render json: { error: 'Project Not Found' }, status: 404
-    end
+    render json: { failed_ids:  @failed_ids }, status: :ok
   end
 
   api :PUT, '/v1/projects/:id/users/remove', 'REMOVE list of users from project'
@@ -45,6 +31,22 @@ class Api::V1::Projects::UsersController < ApplicationController
   end
 
   private
+
+  def set_project
+    @project = Project.find_by_id(params[:project_id])
+  end
+
+  def set_users
+    # to handle condition where from some user_ids
+    # user record is not present in db,
+    # so retrive user_ids from params
+    # only if user is present in db
+    users = User.where(id: params[:user_ids])
+
+    # remove users which are already present on project
+    @users = users - @project.users
+    @failed_ids = params[:user_ids] - @users.pluck(:id).map(&:to_s)
+  end
 
   def set_project
     @project = Project.find_by_id(params[:project_id])

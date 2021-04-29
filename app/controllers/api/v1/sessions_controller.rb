@@ -15,7 +15,7 @@ class Api::V1::SessionsController < ApplicationController
         user: user
       }, status: :ok
 
-    rescue GoogleIDToken::ValidationError => e
+    rescue StandardError => e
       head :unauthorized
     end
   end

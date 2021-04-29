@@ -17,5 +17,7 @@ class GoogleValidatorService
   def validate
     aud = JWT.decode(@id_token, nil, false)[0]['aud']
     payload = @validator.check(@id_token, aud)
+  rescue GoogleIDToken::ValidationError => e
+    raise "unauthorized"
   end
 end

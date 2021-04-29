@@ -5,9 +5,6 @@ describe Api::V1::ActivitiesController, type: :request do
 
   describe 'index' do
     let(:user_1) { users(:associate_one) }
-    let(:pending_activities) { user_1.activities.pending.to_json }
-    let(:approved_activities) { user_1.activities.approved.to_json }
-    let(:rejected_activities) { user_1.activities.rejected.to_json }
 
     subject(:index_request) {
       get '/api/v1/activities', params: { status: status },
@@ -21,7 +18,6 @@ describe Api::V1::ActivitiesController, type: :request do
         index_request
 
         expect(response).to have_http_status(:success)
-        expect(json_response.first.keys.flatten.map(&:to_s)).to  match(Activity.column_names.map(&:to_s))
         expect(json_response.map { |x| x[:status] }).to  include('pending')
         expect(json_response.map { |x| x[:status] }).not_to  include('approved')
       end
@@ -34,9 +30,8 @@ describe Api::V1::ActivitiesController, type: :request do
         index_request
 
         expect(response).to have_http_status(:success)
-        expect(json_response.first.keys.flatten.map(&:to_s)).to  match(Activity.column_names)
-        expect(json_response.map { |x| x[:status] }).to  include('approved')
-        expect(json_response.map { |x| x[:status] }).not_to  include('pending')
+        expect(json_response.map { |x| x[:status] }).to include('approved')
+        expect(json_response.map { |x| x[:status] }).not_to include('pending')
       end
     end
 
@@ -47,9 +42,8 @@ describe Api::V1::ActivitiesController, type: :request do
         index_request
 
         expect(response).to have_http_status(:success)
-        expect(json_response.first.keys.flatten.map(&:to_s)).to  match(Activity.column_names)
-        expect(json_response.map { |x| x[:status] }).to  include('rejected')
-        expect(json_response.map { |x| x[:status] }).not_to  include('approved')
+        expect(json_response.map { |x| x[:status] }).to include('rejected')
+        expect(json_response.map { |x| x[:status] }).not_to include('approved')
       end
     end
   end

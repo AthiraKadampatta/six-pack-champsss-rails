@@ -45,4 +45,34 @@ describe Api::V1::Projects::UsersController, type: :request do
       end
     end
   end
+
+  describe '#destroy' do
+    let(:user1) { users(:associate_one) }
+    let(:user2) { users(:associate_two) }
+    let(:project) { projects(:one) }
+
+    before do
+      project.users << [user1, user2]
+    end
+
+    subject(:remove_project_users_api) { put "/api/v1/projects/#{project.id}/users/remove", params: { user_ids: [1, 3] }, headers: { 'Authorization' => 'dummy' } }
+
+    context 'when requested by member' do
+      before { sign_in_as(users(:associate_one)) }
+
+      it 'returns 403 status' do
+        remove_project_users_api
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when requested by admin' do
+      before { sign_in_as(users(:admin_one)) }
+
+      it 'deletes requested users' do
+        remove_project_users_api
+        expect(project.users.reload.map(&:id)).not_to include(1)
+      end
+    end
+  end
 end

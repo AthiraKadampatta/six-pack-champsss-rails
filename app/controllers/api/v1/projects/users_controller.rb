@@ -1,13 +1,12 @@
 class Api::V1::Projects::UsersController < ApplicationController
   before_action :require_admin_or_owner
+  before_action :set_project
 
-  api :post, '/projects/:id/users'
-  param :project_id, :number, desc: 'id of the project'
+  api :POST, '/v1/projects/:id/users', 'Add list of users to project'
+  param :project_id, :number, desc: 'ID of the project'
   param :user_ids, Array, desc: 'Array of user ids which we want to add to project'
 
   def create
-    @project = Project.find_by_id(params[:project_id])
-
     if @project
       # to handle condition where from some user_ids
       # user record is not present in db,
@@ -28,5 +27,26 @@ class Api::V1::Projects::UsersController < ApplicationController
     else
       render json: { error: 'Project Not Found' }, status: 404
     end
+  end
+
+  api :PUT, '/v1/projects/:id/users/remove', 'REMOVE list of users from project'
+  param :project_id, :number, desc: 'ID of the project'
+  param :user_ids, Array, desc: 'Array of user ids which we want to remove from project'
+
+  def remove
+    return head :not_found unless @project
+
+    users = User.where(id: params[:user_ids])
+    if @project.users.delete(users)
+      head :ok and return
+    else
+      head :unprocessable_entity and return
+    end
+  end
+
+  private
+
+  def set_project
+    @project = Project.find_by_id(params[:project_id])
   end
 end

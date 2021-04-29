@@ -104,5 +104,10 @@ describe Api::V1::Admin::ProjectsController, type: :request do
         expect(json_response[:name]).to include 'can\'t be blank'
       end
     end
+
+    it 'adds current user to the project' do
+      post "/api/v1/admin/projects", params: { project: { name: 'Test Project new' } }, headers: { 'Authorization' => 'dummy' }
+      expect(Project.last.users).to include(users(:admin_one))
+    end
   end
 end

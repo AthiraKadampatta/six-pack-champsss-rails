@@ -14,6 +14,7 @@ class Api::V1::Admin::ProjectsController < ApplicationController
     @project = Project.create(project_params)
 
     if @project.persisted?
+      @project.users << current_user
       render json: @project, status: :ok
     else
       render json: @project.errors, status: :unprocessable_entity

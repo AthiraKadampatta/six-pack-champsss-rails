@@ -1,6 +1,4 @@
-# README
-
-## KLAP APIs
+# KLAP APIs
 
 Kiprosh Laureate Awards Portal (KLAP) is a portal which we have created for the Kiprosh associates. Associates can login to this portal and claim for points if they have contributed to other departments like Hiring, KFC, & COE of the Organization.
 
@@ -22,15 +20,15 @@ The APIs have been documented - [here](https://six-pack-champsss-rails.herokuapp
 
 * Ruby version - ruby-3.0.1
 
-* System dependencies - 
+* System dependencies - Whenever gem runs cron job for Slack notification
 
-* Configuration - 
+* Configuration - export CORS_ORIGINS = "https://kipklaps.vercel.app,http://localhost:4000"
 
-* Database creation - rails db:migrate
+* Database creation - bundle exec rails db:create
 
-* Database initialization - rake db:seed
+* Database initialization - bundle exec rake db:seed
 
-* How to run the test suite -  
+* How to run the test suite -  bundle exec rspec filename
 
 * Services - CRON Job for Slack notification using Whenever gem
 

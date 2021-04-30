@@ -12,7 +12,8 @@ Kiprosh Laureate Awards Portal (KLAP) is a portal which we have created for the 
 - [jwt](https://github.com/jwt/ruby-jwt)
 - [faraday](https://github.com/lostisland/faraday)
 - [google-id-token](https://github.com/google/google-id-token)
-- [aasm](https://github.com/aasm/aasm)
+- [sidekiq](https://github.com/mperham/sidekiq)
+- [whenever](https://github.com/javan/whenever)
 
 ### Documentation Link
 
@@ -32,4 +33,4 @@ The APIs have been documented - [here](https://six-pack-champsss-rails.herokuapp
 
 * Services - CRON Job for Slack notification using Whenever gem
 
-* Deployment instructions - Auto deployment is setup
+* Deployment instructions - Auto deployed once Travis build passes. Need to run `bundle exec rails db:migrate` manually

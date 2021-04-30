@@ -4,7 +4,7 @@ module Notifier
   end
 end
 
-Notifier.config = YAML.load_file("#{Rails.root}/config/slack_notifier.yml")[Rails.env].symbolize_keys
+Notifier.config = Rails.application.config_for(:slack_notifier)
 
 SLACK_INCOMING_WEBHOOK = Notifier.config[:slack_incoming_webhook]
 SLACK_APP_TOKEN = Notifier.config[:slack_app_token]

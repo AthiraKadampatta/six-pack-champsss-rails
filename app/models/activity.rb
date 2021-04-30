@@ -42,12 +42,22 @@ class Activity < ApplicationRecord
   end
 
   def self.weekly_top_five_contibutors
-    Activity.approved
-      .where('reviewed_at >= ?', Time.zone.now - 7.days)
-      .group(:user_id)
-      .sum(:points_granted)
-      .reject{|k,v| v.zero?}
-      .sort_by{|k, v| -v}
-      .first(5)
+    @weekly_top_five_contibutors ||=
+      ActiveRecord::Base.connection
+        .exec_query('SELECT users.name, sum(activities.points_granted) as total_points
+        FROM "users" INNER JOIN "activities"
+        ON "activities"."user_id" = "users"."id"
+        WHERE "activities"."status" = 1
+        GROUP BY "users"."id"
+        ORDER BY "total_points" DESC;').rows
+  end
+
+  def self.slack_notification_message
+    message = "*Top 5 Klap earners of week* :clap: :clap:"
+    weekly_top_five_contibutors.each do |name, points|
+      message << "\n\n#{name}:  #{points} points :tada:"
+    end
+
+    message if weekly_top_five_contibutors.any?
   end
 end

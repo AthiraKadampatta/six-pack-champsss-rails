@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe User, :type => :model do
+  before { allow(SlackService).to receive(:send_slack_notification) }
+
   it 'assigns default role' do
     user = User.new(email: 'test@email.com')
     expect(user.role).to eq 'associate'
